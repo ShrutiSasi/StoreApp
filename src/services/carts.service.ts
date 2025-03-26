@@ -10,7 +10,7 @@ import { User } from '../models/user';
 })
 export class CartsService {
     http = inject(HttpClient);
-    apiUrl = 'https://fakestoreapi.com/carts';    
+    apiUrl = 'https://fakestoreapi.com/carts';
 
     private cartItems = new BehaviorSubject<any[]>(this.getCartFromLocalStorage());
     cartItems$ = this.cartItems.asObservable();  
@@ -28,7 +28,7 @@ export class CartsService {
     }
 
     // Add product to cart
-    addToCart(product: any) {
+    addToCart(cartid: number, product: any) {
         const currentCart = this.cartItems.value;
         const existingItem = currentCart.find((item) => item.id === product.id);
 
@@ -41,7 +41,7 @@ export class CartsService {
         this.cartItems.next([...currentCart]);
         this.saveCartToLocalStorage(currentCart);
         this.totalItems.set(this.getTotalItems());
-        this.updateUserCartIfLoggedIn();
+        this.updateUserCartIfLoggedIn(cartid);
     }
    
     // Get all cart items
@@ -50,7 +50,7 @@ export class CartsService {
     // }
 
     // Remove product from cart
-    removeFromCart(product: any) {
+    removeFromCart(cartid: number, product: any) {
         const currentCart = this.cartItems.value;
         const existingItem = currentCart.find((item) => item.id === product.id);
         let index= -1;
@@ -68,7 +68,7 @@ export class CartsService {
         // }
         this.saveCartToLocalStorage(this.cartItems.value);
         this.totalItems.set(this.getTotalItems());
-        this.updateUserCartIfLoggedIn();
+        this.updateUserCartIfLoggedIn(cartid);
         //this.cartItems.next([...currentCart]);
         //this.saveCartToLocalStorage(currentCart);
         /*let cart = this.getCartFromLocalStorage();
@@ -78,15 +78,17 @@ export class CartsService {
     }
     
     // Clear entire cart
-    clearCart() {
+    clearCart(cartid: number) {
         this.cartItems.next([]);
         localStorage.removeItem('cart'); 
-        this.updateUserCartIfLoggedIn();
+        this.updateUserCartIfLoggedIn(cartid);
     }
 
     // Restore user's cart after login
     restoreCartFromUser(userCart: any[]) {
+        console.log('Restoring cart from user:', userCart);
         this.cartItems.next(userCart);
+        this.totalItems.set(this.getTotalItems());
         this.saveCartToLocalStorage(userCart);
     }
 
@@ -108,15 +110,27 @@ export class CartsService {
         return cart$;
     }
 
-    private updateUserCartIfLoggedIn() {
+    // Update the cart using cartId
+    updateCart(cartId: number, updatedCart: any): Observable<any> {
+        return this.http.put(`${this.apiUrl}/${cartId}`, updatedCart);
+    }
+
+    private updateUserCartIfLoggedIn(cartid: number) {
         const storedData = localStorage.getItem('user');
         if (storedData) {
           const user = JSON.parse(storedData) as User;
           const cartData = {
             userId: user.id,
+            date: new Date().toISOString().split('T')[0],
             products: this.cartItems.value.map((item) => ({ productId: item.id, quantity: item.quantity }))
           };
-          this.http.post(`${this.apiUrl}/${user.id}`, cartData).subscribe();
+          //this.http.put(`${this.apiUrl}/${user.id}`, cartData).subscribe();
+          // Send PUT request to update the cart
+            this.updateCart(cartid, cartData).subscribe({next: (response) => {
+                console.log("Cart updated successfully:", response);
+            }, error: (error) => {
+                console.error("Error updating cart:", error);}
+            });
         }
     }
 

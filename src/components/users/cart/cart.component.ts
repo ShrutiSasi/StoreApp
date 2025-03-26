@@ -18,21 +18,31 @@ import { filter, forkJoin, map, switchMap } from 'rxjs';
   imports: [CardComponent, CommonModule, ScrollupComponent],
 })
 export class CartComponent{
-  @Input() product!: Product;
-  cartItems: any[] = [];
+  @Input() product!: Product;   
+  productService = inject(ProductsService);
   apiProduct: any;
   totalPrice = signal(0);
-  router = inject(Router);
   cartService = inject(CartsService);
-  productService = inject(ProductsService);
+  cartItems: any[] = [];        
+  cartId!: number; // Will store the cart ID
+  router = inject(Router);
   authService = inject(AuthService);
   isLoggedIn$ = toSignal(this.authService.isLoggedIn$);
   loggedInUser: User | null = null;
   
   ngOnInit() {
+    
     const storedData = localStorage.getItem('user');
     if(storedData){
       this.loggedInUser = JSON.parse(storedData) as User;
+      this.cartService.getCartByUserId(this.loggedInUser.id).subscribe(cart => {
+        if (cart) {
+          this.cartId = cart[0].id;
+          console.log(`Cart ID for user ${this.loggedInUser}:`, this.cartId);
+        } else {
+          console.warn("No cart found for this user.");
+        }
+      });
       this.loadCart();
     }
     else {
@@ -88,18 +98,20 @@ export class CartComponent{
     });
   }
 
+  
+
   addToCart(product: any) {
-    this.cartService.addToCart(product);
+    this.cartService.addToCart(this.cartId, product);
     this.totalPrice.set(this.cartService.getTotalPrice());
   }
   
   removeFromCart(product: Product) {
-    this.cartService.removeFromCart(product);
+    this.cartService.removeFromCart(this.cartId, product);
     this.totalPrice.set(this.cartService.getTotalPrice());
   }
 
   clearCart() {
-    this.cartService.clearCart();
+    this.cartService.clearCart(this.cartId);
     this.totalPrice.set(0);
   }
 

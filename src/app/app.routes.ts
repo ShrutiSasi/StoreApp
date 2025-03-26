@@ -16,8 +16,8 @@ export const routes: Routes = [
     {path: 'shop', component: AllproductsComponent},
     {path: 'login', component: LoginComponent},
     {path: 'product/:id', 
-        loadComponent: () => import('../components/products/details/details.component').then(mod => mod.DetailsComponent),
-        //component: DetailsComponent
+        //loadComponent: () => import('../components/products/details/details.component').then(mod => mod.DetailsComponent),
+        component: DetailsComponent
     },
     {path: 'cart', component: CartComponent},
     {path: 'payment', component: PaymentComponent},
