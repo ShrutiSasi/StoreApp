@@ -30,7 +30,7 @@ export class DetailsComponent{
   }
 
   addToCart(){
-    this.cartService.addToCart(this.product);
+    this.cartService.addToCart(null, this.product);
     this.alertBox.message = "Product added to cart";
     this.alertBox.openModal();
   }

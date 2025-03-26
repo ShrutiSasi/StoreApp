@@ -20,6 +20,7 @@ export class CartsService {
     // Get cart items from local storage
     private getCartFromLocalStorage(): any[] {
         return JSON.parse(localStorage.getItem('cart') || '[]');
+        //this.totalItems.set(this.getTotalItems());
     }
 
     // Save cart items to local storage
@@ -28,7 +29,7 @@ export class CartsService {
     }
 
     // Add product to cart
-    addToCart(cartid: number, product: any) {
+    addToCart(cartid: number|null, product: any) {        
         const currentCart = this.cartItems.value;
         const existingItem = currentCart.find((item) => item.id === product.id);
 
@@ -41,7 +42,9 @@ export class CartsService {
         this.cartItems.next([...currentCart]);
         this.saveCartToLocalStorage(currentCart);
         this.totalItems.set(this.getTotalItems());
-        this.updateUserCartIfLoggedIn(cartid);
+        if(cartid){
+            this.updateUserCartIfLoggedIn(cartid);
+        }
     }
    
     // Get all cart items
@@ -81,6 +84,7 @@ export class CartsService {
     clearCart(cartid: number) {
         this.cartItems.next([]);
         localStorage.removeItem('cart'); 
+        this.totalItems.set(0);
         this.updateUserCartIfLoggedIn(cartid);
     }
 

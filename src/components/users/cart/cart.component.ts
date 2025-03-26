@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { ScrollupComponent } from "../../shared/scrollup/scrollup.component";
 import { User } from '../../../models/user';
 import { ProductsService } from '../../../services/products.service';
-import { filter, forkJoin, map, switchMap } from 'rxjs';
+import { filter, forkJoin, map, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -36,7 +36,7 @@ export class CartComponent{
     if(storedData){
       this.loggedInUser = JSON.parse(storedData) as User;
       this.cartService.getCartByUserId(this.loggedInUser.id).subscribe(cart => {
-        if (cart) {
+        if (cart.length>0) {
           this.cartId = cart[0].id;
           console.log(`Cart ID for user ${this.loggedInUser}:`, this.cartId);
         } else {
@@ -45,9 +45,9 @@ export class CartComponent{
       });
       this.loadCart();
     }
-    else {
+    //else {
       this.loadLocalCart();
-    }
+    //}
     // this.cartService.cartItems$.subscribe(items => {
     //   this.cartItems = items;
     //   this.totalPrice.set(this.cartService.getTotalPrice());
@@ -71,6 +71,10 @@ export class CartComponent{
       this.cartService.getCartByUserId(this.loggedInUser.id).pipe(
         filter(cart => cart.length > 0), // Ensure cart exists
         switchMap(cart => {
+          if (!cart || cart.length === 0) {
+            console.warn("No cart found for the user.");
+            return of([]); // Return an empty observable to prevent further errors
+          }
           // Get all product requests as an array of Observables
           const productRequests = cart[0].products.map(productItem => 
             this.productService.getProductById(productItem.productId).pipe(
@@ -82,7 +86,7 @@ export class CartComponent{
           return forkJoin(productRequests);
         })
       )
-      .subscribe(products => {
+      .subscribe(products => {        
         this.cartItems = products;
         this.cartService.restoreCartFromUser(this.cartItems);        
         this.totalPrice.set(this.cartService.getTotalPrice());
