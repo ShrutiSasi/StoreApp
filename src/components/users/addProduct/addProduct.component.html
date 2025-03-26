@@ -1,0 +1,78 @@
+<!-- Reactive Forms -->
+<div class="container" [title]="title">
+  <div class="row d-flex justify-content-center">
+    <div class="col-8">
+      <h2 class="mt-5">Add New Product</h2>
+      <form [formGroup]="addProductForm" (ngSubmit)="onSubmit()" autocomplete="off" class="border border-dark p-4 rounded">
+        
+        <div class="form-group mt-2">
+          <label class="form-label" for="productName">Name<span class="text-danger">*</span></label>
+          @if(productNameEmpty){
+            <span class="text-danger fst-italic">&nbsp;is required</span>
+          }
+          <input formControlName="title" type="text" class="form-control" id="productName" placeholder="Enter product name">          
+        </div>
+
+        <div class="form-group mt-2">
+          <label class="form-label" for="productPrice">Price<span class="text-danger">*</span></label>
+          @if(productPriceEmpty){
+            <span class="text-danger fst-italic">&nbsp;is required</span>
+          }
+          @if(productPriceValid){
+            <span class="text-danger fst-italic">&nbsp;must be a valid number with up to two decimal places</span>
+          }
+          <input formControlName="price" type="text" pattern="^[0-9]+(\.[0-9]{1,2})?$" class="form-control" id="productPrice" placeholder="Enter price">         
+        </div>
+        
+        <div class="form-group mt-2">
+          <label class="form-label" for="productDescription">Description</label>
+          <textarea formControlName="description" type="text" class="form-control" id="productDescription" placeholder="Enter description"></textarea>
+        </div>
+        
+        <div class="form-group mt-2">
+          <label class="form-label" for="productCategory">Category<span class="text-danger">*</span></label>
+          @if(productCategoryValid){
+            <span class="text-danger fst-italic">&nbsp;is required</span>
+          } 
+          <select formControlName="category" class="form-select" id="productCategory" [formControl]="selectedCategory">
+            <option value="" disabled>Select a category</option>
+            @for(category of categories; track category){
+              <option value="{{category}}">{{category}}</option>
+            }  
+          </select>                   
+        </div>
+        
+        <div class="form-group mt-2" formGroupName="rating">
+          <label class="form-label" for="productCount">Count</label>          
+          @if(productCountValid){
+            <span class="text-danger fst-italic">&nbsp;must be a valid number</span>
+          }
+          <input formControlName="count" type="text" pattern="^[0-9]\d*$" class="form-control" id="productCount" placeholder="Enter count">         
+        </div>
+        
+        <div class="form-group mt-2">
+          <label class="form-label" for="productImage">Product Image</label>
+          @if(fileError){
+            <span class="text-danger fst-italic">&nbsp;{{ fileError }}</span>
+          }
+          <input formControlName="image" type="file" accept="image/*" class="form-control" id="productImage" (change)="onFileSelected($event)">
+        </div>
+        
+        <div class="mt-4 mb-4">
+          <button type="submit" class="btn btn-dark">Submit</button>
+        </div>
+        
+        @if(imagePreview){
+          <div class="mt-3">
+            <p class="fw-bold">Image Preview:</p>
+            <img [src]="imagePreview" class="img-fluid rounded border shadow-sm" style="max-width: 200px;">
+          </div>
+        }
+        @if(errorMessage){
+          <p class="text-danger mt2">{{errorMessage}}</p>
+        }
+      </form>
+      <app-alert></app-alert>
+    </div>
+  </div>
+</div>

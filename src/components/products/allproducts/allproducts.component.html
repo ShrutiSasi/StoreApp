@@ -1,0 +1,21 @@
+<div class="container-fluid mt-4">
+  <div class="row row-cols-3">
+    <form>
+      <input class="form-control me-2 ps-5 rounded-pill" type="search" placeholder="Search..." aria-label="Search" [formControl]="searchControl">
+      <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+    </form>
+  </div>
+  <div class="row row-cols-5 ">    
+      @for(product of filteredProducts$ | async; track product.id)
+      {
+        <div class="card m-4 shadow">
+          <img [src]="product.image" class="card-img-top fixed-img" [alt]="product.title">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <button class="btn card-link" (click)="goToProductDetails(product)" >More<i class="bi bi-chevron-double-right"></i></button>
+          </div>
+        </div>
+      }    
+  </div>
+  <app-scrollup></app-scrollup>  
+</div>

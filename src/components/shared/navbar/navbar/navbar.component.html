@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/" >
+      <span class="h4 fw-bold mb-0"><i class="bi bi-box-fill" style="color: #B8860B;"></i> Fake Store</span>
+    </a>
+    <!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>-->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">      
+      <ul class="navbar-nav flex-column flex-md-row me-4">
+        <li class="nav-item">
+          <a routerLink="/shop" routerLinkActive="active" class="nav-link active" aria-current="page">Shop</a>
+        </li>
+        @if(!isLoggedIn$()){
+          <li class="nav-item">
+            <a routerLink="/login" routerLinkActive="active" class="nav-link" >Sign in</a>
+          </li>
+        }
+        <li class="nav-item pe-2">
+          <a routerLink="/cart" routerLinkActive="active" class="nav-link" ><i class="bi bi-cart3"></i>
+            @if(cartService.totalItems() > 0){
+              <span class="position-absolute translate-middle badge rounded-pill bg-danger">
+                {{cartService.totalItems()}}
+                <span class="visually-hidden">cart items</span>
+              </span>   
+            }                 
+          </a>
+        </li> 
+        @if(isLoggedIn$()){
+          <li class="nav-item">
+            <div class="ms-auto dropdown">
+              <button appToggle [target]="'#userDropdown'" routerLinkActive="active" class="btn btn-light collapsed" type="button">
+                <i class="bi bi-person-circle"></i>
+              </button>
+              <!-- Dropdown Popout -->
+              <ul id="userDropdown" class="dropdown-menu dropdown-menu-end collapse">
+                <li><a routerLink="/profile" class="dropdown-item">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item" (click)="logout()">Sign Out</button></li>
+              </ul>
+            </div>
+          </li>    
+          <li class="nav-item">
+            <a routerLink="/newproduct" routerLinkActive="active" class="nav-link">Add Product</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+          </li>          
+        }      
+      </ul>
+    </div>
+  </div>
+</nav>

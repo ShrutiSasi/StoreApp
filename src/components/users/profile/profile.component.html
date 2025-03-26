@@ -1,0 +1,21 @@
+<div class="fluid-container m-4" [title]="title">
+  @if(loggedInUser){
+  <h4 class="pt-4 pb-4"><strong>Welcome, {{ loggedInUser.name.firstname | titlecase}}</strong></h4>    
+    <div class="row d-flex w-75 justify-content-center border border-dark p-4 rounded">
+        <div class="row row-cols-2 gy-3">
+            <div class="col"><strong>Name:</strong></div>
+            <div class="col">{{ loggedInUser.name.firstname | titlecase }} {{ loggedInUser.name.lastname | titlecase }}</div>
+            <div class="col"><strong>UserName:</strong></div>
+            <div class="col">{{ loggedInUser.username }}</div>
+            <div class="col"><strong>Email:</strong></div>
+            <div class="col">{{ loggedInUser.email }}</div>
+            <div class="col"><strong>Address:</strong></div>
+            <div class="col">{{ loggedInUser.address.number }} {{ loggedInUser.address.street}}</div>
+            <div class="col"><strong>City:</strong></div>
+            <div class="col">{{ loggedInUser.address.city | titlecase }}</div>
+            <div class="col"><strong>Zip Code:</strong></div>
+            <div class="col">{{ loggedInUser.address.zipcode }}</div>
+        </div>      
+    </div>
+  }
+</div>

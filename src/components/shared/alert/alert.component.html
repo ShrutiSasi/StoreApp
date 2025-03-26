@@ -1,0 +1,13 @@
+<div #alertBox id="modalCenter" tabindex="-1" aria-modal="true" role="dialog" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">      
+      <div class="modal-body">
+        <p>{{message}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div #backDrop></div>

@@ -1,0 +1,13 @@
+<div class="d-flex"> 
+
+  @for(star of stars().fullstars; track star){
+    <i class="bi bi-star-fill text-warning"></i>      
+  }
+  @if(stars().halfstar){
+    <i class="bi bi-star-half text-warning"></i>
+  }
+  @for(star of stars().emptystars; track star){
+    <i class="bi bi-star text-warning"></i>      
+  }
+  <span>&nbsp;{{ rating }}</span>
+</div>

@@ -1,0 +1,25 @@
+<div class="container mt-4" [title]="title">
+  <h2 class="mb-3">User List</h2>
+  <table class="table table-bordered table-hover shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(user of registeredUsers(); track user.id){
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.name.firstname | titlecase }} {{ user.name.lastname | titlecase }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{{ user.address.number }} {{ user.address.street | titlecase }} {{ user.address.city | titlecase }} {{ user.address.zipcode }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

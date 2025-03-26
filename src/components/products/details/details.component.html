@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <app-card>
+    <div placeholder1>
+      <img [src]="product.image" [alt]="product.title" class="img-fluid custom-img" >
+    </div>
+    <div placeholder2 class="w-75">
+      <h3>{{ product.title }}</h3>
+      <p class="card-text">{{ product.description }}</p>
+      <p class="card-text">Price
+        <span class="badge bg-secondary">{{ product.price | currency }}</span>
+      </p>
+      <p>
+        <app-rating [rating]="product.rating.rate"></app-rating>
+      </p>
+      <button class="btn btn-dark btn-lg btn-block" type="button" (click)="addToCart()" data-bs-toggle="modal" data-bs-backdrop="true">Add to Cart</button>
+      <app-alert></app-alert>
+    </div>
+  </app-card>  
+</div>

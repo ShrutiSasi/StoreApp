@@ -1,0 +1,34 @@
+<div>
+  <div class="container-fluid d-flex justify-content-between mt-4">
+    <h2>Your cart total: {{totalPrice() | currency }}</h2>
+    @if(cartItems.length != 0){
+      <span><button class="btn btn-dark btn-lg btn-block" type="button" (click)="proceedToPay()" >Proceed to Check out</button></span>
+    }
+  </div>
+  <div class="container-fluid w-75 mt-4 ">
+    @for (item of cartItems; track item.id) {
+      <app-card>
+        <div placeholder1>
+          <img [src]="item.image" [alt]="item.title" class="img-fluid" style="object-fit: contain; height: 200px;">
+        </div>
+        <div placeholder2>
+          <h5>{{ item.title }}</h5>
+          <p class="card-text">Price
+            <span>{{ item.price | currency }}</span>
+          </p>
+          <div>
+            <button (click)="removeFromCart(item)"><i class="bi bi-dash"></i></button>
+            <span class="shadow-none p-2 bg-body-tertiary">{{item.quantity}}</span>
+            <button (click)="addToCart(item)"><i class="bi bi-plus"></i></button>
+          </div>                
+        </div>
+      </app-card>  
+    }
+  </div>
+  @if(cartItems.length != 0){
+    <div class="text-end">
+      <button class="btn btn-dark btn-lg btn-block me-3" type="button" (click)="clearCart()">Clear Cart</button>
+    </div>
+  }
+  <app-scrollup></app-scrollup>
+</div>

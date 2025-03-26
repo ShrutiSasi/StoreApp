@@ -1,0 +1,16 @@
+.banner {
+    position: relative;
+    height: 50vh;
+    background: url('/assets/images/Banner.jpg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.text-gold {
+    /* color: #FFD700; Gold Color */
+    background: linear-gradient(90deg, #FFD700, #FFB800, #D4AF37, #B8860B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+  }
